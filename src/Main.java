@@ -17,7 +17,7 @@ public class Main {
 
         Empleador empleador = new Empleador("1070413933","PIDMAD - Servicios Mecatronicos");
         Trabajador trabajador = new Trabajador("704139336","Pierre David Maldonado Diaz");
-        DatosLaborales datosLaborales = new DatosLaborales(empleador, trabajador, LocalDate.parse("1950-07-25"),"Obrero","General", LocalDate.parse("1992-05-13"));
+        DatosLaborales datosLaborales = new DatosLaborales(empleador, trabajador, LocalDate.parse("1990-12-31"),"Obrero","General", LocalDate.parse("1992-05-13"));
         ArrayList<String> listaBeneficios = new ArrayList<>();
         listaBeneficios.add("CTS");
         listaBeneficios.add("Gratificaciones");
@@ -25,10 +25,6 @@ public class Main {
 
         ListaPeriodos listaPeriodos = new ListaPeriodos(datosLaborales,listaBeneficios);
         listaPeriodos.printPerxBeneficio();
-
-
-
-
 
     }
 }

@@ -79,7 +79,6 @@ public class ListaPeriodos {
                     System.out.println("\t\tSub-Periodo Tipo 1");
 
                     /*  Secuencia en el Sub-Periodo Tipo 1  */
-                    System.out.println("\t\t\tSecuencia en el Sub-Periodo Tipo 1:");
                     timeToFinPer = f0.until(LocalDate.parse(FEC_FIN_OSPT1));
                     Periodo periodo;
                     for(int a = 0; a <= timeToFinPer.getYears(); a++){
@@ -87,57 +86,76 @@ public class ListaPeriodos {
                         p++;
                         periodo.setNumPer(p);
                         periodo.setFecIni(f0.plusYears(a).plusDays(a));
-                        if((a == timeToFinPer.getYears()) && (!timeToFinPer.equals(Period.of(0,0,0)))){
+                        if((f0.plusYears(a+1).plusDays(a)).isAfter(LocalDate.parse(FEC_FIN_OSPT1).minusDays(a+1))){
                             ff = LocalDate.parse(FEC_FIN_OSPT1);
                             periodo.setFecFin(ff);
+                            periodos.add(periodo);
+                            break;
                         } else {
                             ff = f0.plusYears(a+1).plusDays(a);
                             periodo.setFecFin(ff);
+                            periodos.add(periodo);
                         }
-                        periodos.add(periodo);
-                    }
-
-                     /*  Recorriendo los periodos    */
-                    for(Periodo per : periodos){
-                        System.out.println("\t\t\tPeriodo N°" + per.getNumPer() + " \t(" + per.getFecIni() + " - " + per.getFecFin() + ")" );
                     }
 
                     /*  Secuencia en el Sub-Periodo Tipo 2  */
-                    System.out.println("\t\t\tSecuencia en el Sub-Periodo Tipo 2:");
-                    ff = periodos[ArrayUtil.lastIndexOf(periodos)];
+                    ff = (LocalDate.parse(FEC_FIN_OSPT1).plusDays(1));
                     timeToFinPer = ff.until(LocalDate.parse(FEC_FIN_PT1));
-                    f0=ff.plusDays(1);
-
+                    f0=ff;
                     for(int a = 0; a <= timeToFinPer.getYears(); a++){
                         periodo = new Periodo();
                         p++;
                         periodo.setNumPer(p);
                         periodo.setFecIni(f0.plusYears(a).plusDays(a));
-                        if((a == timeToFinPer.getYears()) && (!timeToFinPer.equals(Period.of(0,0,0)))){
+                        if((f0.plusYears(a+1).plusDays(a)).isAfter(LocalDate.parse(FEC_FIN_PT1).minusDays(a+1))){
                             ff = LocalDate.parse(FEC_FIN_PT1);
                             periodo.setFecFin(ff);
+                            periodos.add(periodo);
+                            break;
                         } else {
                             ff = f0.plusYears(a+1).plusDays(a);
                             periodo.setFecFin(ff);
+                            periodos.add(periodo);
                         }
                     }
 
                     /*  Recorriendo los periodos    */
+                    System.out.println("\t\t\tSecuencia en el Sub-Periodo Tipo 1:");
                     for(Periodo per : periodos){
                         System.out.println("\t\t\tPeriodo N°" + per.getNumPer() + " \t(" + per.getFecIni() + " - " + per.getFecFin() + ")" );
+                        if(per.getFecFin().equals(LocalDate.parse(FEC_FIN_OSPT1))){
+                            System.out.println("\t\t\tSecuencia en el Sub-Periodo Tipo 2:");
+                        }
                     }
                 }
 
                 /*  Sub-Periodo Tipo 2  */
                 else{
-                    System.out.println("Sub-Periodo Tipo 2");
-
-                    /*  Secuencia en el Sub-Periodo Tipo 2  */
-                    System.out.println("\t\t\tSecuencia en el Sub-Periodo Tipo 2");
+                    System.out.println("\t\tSub-Periodo Tipo 2");
                     timeToFinPer = f0.until(LocalDate.parse(FEC_FIN_PT1));
+                    Periodo periodo;
+                    for(int a = 0; a <= timeToFinPer.getYears(); a++){
+                        periodo = new Periodo();
+                        p++;
+                        periodo.setNumPer(p);
+                        periodo.setFecIni(f0.plusYears(a).plusDays(a));
+                        if((f0.plusYears(a+1).plusDays(a)).isAfter(LocalDate.parse(FEC_FIN_PT1).minusDays(a+1))){
+                            ff = LocalDate.parse(FEC_FIN_PT1);
+                            periodo.setFecFin(ff);
+                            periodos.add(periodo);
+                            break;
+                        } else {
+                            ff = f0.plusYears(a+1).plusDays(a);
+                            periodo.setFecFin(ff);
+                            periodos.add(periodo);
+                        }
+                    }
+                    /*  Secuencia en el Sub-Periodo Tipo 2  */
+                    System.out.println("\t\t\tSecuencia en el Sub-Periodo Tipo 2:");
+                    for(Periodo per : periodos){
+                        System.out.println("\t\t\tPeriodo N°" + per.getNumPer() + " \t(" + per.getFecIni() + " - " + per.getFecFin() + ")" );
+                    }
                 }
-
-
             }
 
             /*  Tipo de vinculo = 'Empleado'  */
