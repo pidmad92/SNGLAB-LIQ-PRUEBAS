@@ -20,7 +20,10 @@ public class ListaPeriodos {
     private static final String FEC_FIN_PT1 = "1990-12-31";
     private static final String FEC_FIN_OSPT1 = "1962-01-11";
 
+    private static final String FEC_INI_EC2 = "1962-07-12";
 
+    private static final String FEC_FIN_EC2T1 = "1979-09-30";
+    private static final String FEC_FIN_EC2T2 = "1989-12-31";
 
     private static final String FEC_FIN_PT2 = "2000-10-31";
     private static final String FEC_FIN_PT3 = "2004-10-31";
@@ -49,8 +52,6 @@ public class ListaPeriodos {
                 printPeriodosCts();
                 break;
             case "gratificaciones":
-                System.out.println("Periodos de " + ben);
-                printPeriodosGrati();
                 break;
             default:
                 System.out.println("Beneficio no contemplado");
@@ -118,15 +119,6 @@ public class ListaPeriodos {
                             periodos.add(periodo);
                         }
                     }
-
-                    /*  Recorriendo los periodos    */
-                    System.out.println("\t\t\tSecuencia en el Sub-Periodo Tipo 1:");
-                    for(Periodo per : periodos){
-                        System.out.println("\t\t\tPeriodo N°" + per.getNumPer() + " \t(" + per.getFecIni() + " - " + per.getFecFin() + ")" );
-                        if(per.getFecFin().equals(LocalDate.parse(FEC_FIN_OSPT1))){
-                            System.out.println("\t\t\tSecuencia en el Sub-Periodo Tipo 2:");
-                        }
-                    }
                 }
 
                 /*  Sub-Periodo Tipo 2  */
@@ -150,10 +142,16 @@ public class ListaPeriodos {
                             periodos.add(periodo);
                         }
                     }
-                    /*  Secuencia en el Sub-Periodo Tipo 2  */
-                    System.out.println("\t\t\tSecuencia en el Sub-Periodo Tipo 2:");
-                    for(Periodo per : periodos){
-                        System.out.println("\t\t\tPeriodo N°" + per.getNumPer() + " \t(" + per.getFecIni() + " - " + per.getFecFin() + ")" );
+                }
+
+                /*  Recorriendo los periodos    */
+                if(datosLaborales.getFecVincul().isBefore((LocalDate.parse(FEC_FIN_OSPT1).plusDays(1)))) {
+                    System.out.println("\t\t\tSecuencia en el Sub-Periodo Tipo 1:");
+                }
+                for(Periodo per : periodos){
+                    System.out.println("\t\t\tPeriodo N°" + per.getNumPer() + " \t(" + per.getFecIni() + " - " + per.getFecFin() + ")" );
+                    if(per.getFecFin().equals(LocalDate.parse(FEC_FIN_OSPT1))){
+                        System.out.println("\t\t\tSecuencia en el Sub-Periodo Tipo 2:");
                     }
                 }
             }
@@ -162,56 +160,109 @@ public class ListaPeriodos {
             else if(datosLaborales.getTipVinculo().equalsIgnoreCase("Empleado")) {
                 System.out.println("Caso: 'Empleado'");
 
-                /*  Sub-Periodo Tipo 1  */
+                /*  Caso 1  */
+                if(datosLaborales.getFecVincul().isBefore((LocalDate.parse(FEC_INI_EC2)))){
+                    System.out.println("Caso de Ingreso 1: ");
 
+                    timeToFinPer = f0.until(LocalDate.parse(FEC_FIN_PT1));
+                    Periodo periodo;
+                    for(int a = 0; a <= timeToFinPer.getYears(); a++){
+                        periodo = new Periodo();
+                        p++;
+                        periodo.setNumPer(p);
+                        periodo.setFecIni(f0.plusYears(a).plusDays(a));
+                        if((f0.plusYears(a+1).plusDays(a)).isAfter(LocalDate.parse(FEC_FIN_PT1).minusDays(a+1))){
+                            ff = LocalDate.parse(FEC_FIN_PT1);
+                            periodo.setFecFin(ff);
+                            periodos.add(periodo);
+                            break;
+                        } else {
+                            ff = f0.plusYears(a+1).plusDays(a);
+                            periodo.setFecFin(ff);
+                            periodos.add(periodo);
+                        }
+                    }
 
-                /*  Sub-Periodo Tipo 2  */
+                    /*  Recorriendo los periodos    */
+                    for(Periodo per : periodos){
+                        System.out.println("\t\t\tPeriodo N°" + per.getNumPer() + " \t(" + per.getFecIni() + " - " + per.getFecFin() + ")" );
+                    }
+
+                }
+                /*  Caso 2  */
+                else if(datosLaborales.getFecVincul().isAfter((LocalDate.parse(FEC_INI_EC2).minusDays(1)))){
+                    System.out.println("Caso de Ingreso 2: ");
 
                     /*  Sub-Sub-Periodo Tipo 1  */
+                    if(datosLaborales.getFecVincul().isBefore((LocalDate.parse(FEC_FIN_EC2T1).plusDays(1)))) {
+                        System.out.println("\t\tSub-Periodo Tipo 1");
 
+                        timeToFinPer = f0.until(LocalDate.parse(FEC_FIN_EC2T1));
+                        Periodo periodo;
+                        for(int a = 0; a <= timeToFinPer.getYears(); a++){
+                            periodo = new Periodo();
+                            p++;
+                            periodo.setNumPer(p);
+                            periodo.setFecIni(f0.plusYears(a).plusDays(a));
+                            if((f0.plusYears(a+1).plusDays(a)).isAfter(LocalDate.parse(FEC_FIN_EC2T1).minusDays(a+1))){
+                                ff = LocalDate.parse(FEC_FIN_EC2T1);
+                                periodo.setFecFin(ff);
+                                periodos.add(periodo);
+                                break;
+                            } else {
+                                ff = f0.plusYears(a+1).plusDays(a);
+                                periodo.setFecFin(ff);
+                                periodos.add(periodo);
+                            }
+                        }
+
+                         /*  Recorriendo los periodos    */
+                        for(Periodo per : periodos){
+                            System.out.println("\t\t\tPeriodo N°" + per.getNumPer() + " \t(" + per.getFecIni() + " - " + per.getFecFin() + ")" );
+                        }
+
+                    }
                     /*  Sub-Sub-Periodo Tipo 2  */
+                    if(datosLaborales.getFecVincul().isBefore((LocalDate.parse(FEC_FIN_EC2T2).plusDays(1)))) {
+                        System.out.println("\t\tSub-Periodo Tipo 2");
+
+                        timeToFinPer = f0.until(LocalDate.parse(FEC_FIN_EC2T2));
+                        Periodo periodo;
+                        for(int a = 0; a <= timeToFinPer.getYears(); a++){
+                            periodo = new Periodo();
+                            p++;
+                            periodo.setNumPer(p);
+                            periodo.setFecIni(f0.plusYears(a).plusDays(a));
+                            if((f0.plusYears(a+1).plusDays(a)).isAfter(LocalDate.parse(FEC_FIN_EC2T2).minusDays(a+1))){
+                                ff = LocalDate.parse(FEC_FIN_EC2T2);
+                                periodo.setFecFin(ff);
+                                periodos.add(periodo);
+                                break;
+                            } else {
+                                ff = f0.plusYears(a+1).plusDays(a);
+                                periodo.setFecFin(ff);
+                                periodos.add(periodo);
+                            }
+                        }
+
+                         /*  Recorriendo los periodos    */
+                        for(Periodo per : periodos){
+                            System.out.println("\t\t\tPeriodo N°" + per.getNumPer() + " \t(" + per.getFecIni() + " - " + per.getFecFin() + ")" );
+                        }
+
+                    }
+
 
                     /*  Sub-Sub-Periodo Tipo 3  */
-
-                    /*  Sub-Sub-Periodo Tipo 4  */
-
+                    if(datosLaborales.getFecVincul().isBefore((LocalDate.parse(FEC_FIN_PT1).plusDays(1)))) {
+                        System.out.println("\t\tSub-Periodo Tipo 3");
+                    }
+                }
             }
             /*  Tipo de vinculo = 'Unknown'  */
             else {
                 System.out.println("Error: El tipo de vinculo no fue contemplado");
             }
-
         }
-/*
-
-            timeToFinPer = f0.until(LocalDate.parse(FEC_FIN_P1));
-            System.out.println("Tiempo hasta el fin del periodo CTS: " + timeToFinPer.getYears() + " años " + timeToFinPer.getMonths() + " meses " + timeToFinPer.getDays() + " dias ");
-            for(int a = 0; a <= timeToFinPer.getYears(); a++){
-                System.out.print("Periodo N°" + (a+1) + " \t" + "-" + "\t");
-                System.out.print("f0: " + f0.plusYears(a).plusDays(a));
-                if((a == timeToFinPer.getYears()) && (!timeToFinPer.equals(Period.of(0,0,0)))){
-                    System.out.println(" - " + "ff: " + FEC_FIN_P1);
-                } else {
-                    System.out.print(" - " + "ff: " + f0.plusYears(a+1).plusDays(a));
-                }
-                System.out.println();
-            }
-
-
-            //for(periodoJava2.getYears()>=
-        }else if((datosLaborales.getFecVincul().isAfter(LocalDate.parse("1990-12-31"))) && (datosLaborales.getFecVincul().isBefore(LocalDate.parse("2000-11-01")))){
-            System.out.println("Ingresó después de " + LocalDate.parse("1990-12-31") + " y hasta " + LocalDate.parse("2000-10-31"));
-
-        }else if((datosLaborales.getFecVincul().isAfter(LocalDate.parse("2000-10-31"))) && (datosLaborales.getFecVincul().isBefore(LocalDate.parse("2004-11-01")))){
-            System.out.println("Ingresó después de " + LocalDate.parse("2000-10-31") + " y hasta " + LocalDate.parse("2004-10-31"));
-
-        }else if(datosLaborales.getFecVincul().isAfter(LocalDate.parse("2004-10-31"))){
-            System.out.println("Ingresó después de " + LocalDate.parse("2004-10-31"));
-
-        }*/
-    }
-
-    public void printPeriodosGrati(){
-
     }
 }
