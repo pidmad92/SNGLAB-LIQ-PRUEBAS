@@ -1,10 +1,7 @@
 package Services;
 
-import com.sun.deploy.util.ArrayUtil;
 import model.DatosLaborales;
 import model.Periodo;
-
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -216,14 +213,22 @@ public class ListaPeriodos {
                             }
                         }
 
+
+
+
+
+
                          /*  Recorriendo los periodos    */
                         for(Periodo per : periodos){
                             System.out.println("\t\t\tPeriodo N°" + per.getNumPer() + " \t(" + per.getFecIni() + " - " + per.getFecFin() + ")" );
                         }
 
+
+
                     }
+
                     /*  Sub-Sub-Periodo Tipo 2  */
-                    if(datosLaborales.getFecVincul().isBefore((LocalDate.parse(FEC_FIN_EC2T2).plusDays(1)))) {
+                    if((datosLaborales.getFecVincul().isBefore((LocalDate.parse(FEC_FIN_EC2T2).plusDays(1))))&&(datosLaborales.getFecVincul().isAfter((LocalDate.parse(FEC_FIN_EC2T1).plusDays(1))))) {
                         System.out.println("\t\tSub-Periodo Tipo 2");
 
                         timeToFinPer = f0.until(LocalDate.parse(FEC_FIN_EC2T2));
@@ -254,7 +259,7 @@ public class ListaPeriodos {
 
 
                     /*  Sub-Sub-Periodo Tipo 3  */
-                    if(datosLaborales.getFecVincul().isBefore((LocalDate.parse(FEC_FIN_PT1).plusDays(1)))) {
+                    if((datosLaborales.getFecVincul().isBefore((LocalDate.parse(FEC_FIN_PT1).plusDays(1))))&&(datosLaborales.getFecVincul().isAfter((LocalDate.parse(FEC_FIN_EC2T2).plusDays(1))))) {
                         System.out.println("\t\tSub-Periodo Tipo 3");
                     }
                 }
