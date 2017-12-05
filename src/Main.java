@@ -2,9 +2,6 @@ import Services.ListaPeriodos;
 import model.DatosLaborales;
 import model.Empleador;
 import model.Trabajador;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -17,11 +14,9 @@ public class Main {
 
         Empleador empleador = new Empleador("1070413933","PIDMAD - Servicios Mecatronicos");
         Trabajador trabajador = new Trabajador("704139336","Pierre David Maldonado Diaz");
-        DatosLaborales datosLaborales = new DatosLaborales(empleador, trabajador, LocalDate.parse("1962-07-12"),"Empleado","General", LocalDate.parse("1992-05-13"));
+        DatosLaborales datosLaborales = new DatosLaborales(empleador, trabajador, LocalDate.parse("1962-07-12"),"Empleado","General", LocalDate.parse("2005-01-01"));
         ArrayList<String> listaBeneficios = new ArrayList<>();
         listaBeneficios.add("CTS");
-        listaBeneficios.add("Gratificaciones");
-        listaBeneficios.add("Indemnizaciones");
 
         ListaPeriodos listaPeriodos = new ListaPeriodos(datosLaborales,listaBeneficios);
         listaPeriodos.printPerxBeneficio();
