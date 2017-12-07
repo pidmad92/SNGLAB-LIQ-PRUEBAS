@@ -93,14 +93,14 @@ public class ListaPeriodos {
         Period tmpToFin;
         Periodo per;
         int b = 0;
-        int np = 0;
+        int np = 1;
         ArrayList<Periodo> listPeriodos = new ArrayList<Periodo>();
         if(perlista.size()==0){
             fecIniPer = foUtil;
         } else {
             listPeriodos = perlista;
             fecIniPer = perlista.get(perlista.size() - 1).getFecFin().plusDays(1);
-            np = perlista.get(perlista.size() - 1).getNumPer();
+            np = perlista.get(perlista.size() - 1).getNumPer() + 1;
         }
         if(ffUtil.isBefore(ffPer)){
             fecFinPer = ffUtil;
@@ -108,41 +108,154 @@ public class ListaPeriodos {
             fecFinPer = ffPer;
         }
 
-        tmpToFin = fecIniPer.until(fecFinPer);
-
-
         per = new Periodo();
-        np++;
         per.setNumPer(np);
         per.setFecIni(fecIniPer);
-        if(fecIniPer.isAfter(LocalDate.of(fecIniPer.getYear(),11,1).minusDays(1))&&
-                fecIniPer.isBefore(LocalDate.of(fecIniPer.getYear()+1,5,1))){
 
-            per.setFecFin(LocalDate.of(fecIniPer.getYear()+1,10,31));
+        if((per.getFecIni().isAfter(LocalDate.of(fecIniPer.getYear(),1,1).minusDays(1))&&
+                per.getFecIni().isBefore(LocalDate.of(per.getFecIni().getYear(),5,1)))||
+                ((per.getFecIni().isAfter(LocalDate.of(fecIniPer.getYear(),11,1).minusDays(1))&&
+                        per.getFecIni().isBefore(LocalDate.of(per.getFecIni().getYear()+1,1,1))))){
+
+            per.setFecFin(LocalDate.of(per.getFecIni().getYear(),4,30));
             listPeriodos.add(per);
+            fecIniPer = per.getFecFin().plusDays(1);
 
-        }else{
 
-            per.setFecFin(LocalDate.of(fecIniPer.getYear(),4,30));
+        }else if (per.getFecIni().isAfter(LocalDate.of(fecIniPer.getYear(),5,1).minusDays(1))&&
+                per.getFecIni().isBefore(LocalDate.of(per.getFecIni().getYear(),11,1))){
+
+            per.setFecFin(LocalDate.of(per.getFecIni().getYear(),10,31));
             listPeriodos.add(per);
+            fecIniPer = per.getFecFin().plusDays(1);
         }
-
-        fecIniPer = listPeriodos.get(listPeriodos.size() - 1).getFecFin().plusDays(1);
+        np++;
+        tmpToFin = fecIniPer.until(fecFinPer);
 
         for(int a=0;a<=tmpToFin.toTotalMonths();a=a+6){
             per = new Periodo();
-            np++;
             per.setNumPer(np);
-            per.setFecIni(fecIniPer.plusMonths(a).plusDays(b));
+            per.setFecIni(fecIniPer.plusMonths(a));
             if(per.getFecIni().plusMonths(6).isAfter(fecFinPer.minusDays(b+1))){
                 per.setFecFin(fecFinPer);
                 listPeriodos.add(per);
                 break;
             } else{
-                per.setFecFin(per.getFecIni().plusMonths(6));
+                per.setFecFin(per.getFecIni().plusMonths(6).minusDays(1));
                 listPeriodos.add(per);
             }
             b++;
+            np++;
+        }
+        return listPeriodos;
+    }
+
+    public ArrayList<Periodo> crearPeriodos3(ArrayList<Periodo> perlista, LocalDate ffPer, LocalDate foUtil, LocalDate ffUtil){
+        LocalDate fecIniPer;
+        LocalDate fecFinPer;
+        Period tmpToFin;
+        Periodo per;
+        int b = 0;
+        int np = 1;
+        ArrayList<Periodo> listPeriodos = new ArrayList<Periodo>();
+        if(perlista.size()==0){
+            fecIniPer = foUtil;
+        } else {
+            listPeriodos = perlista;
+            fecIniPer = perlista.get(perlista.size() - 1).getFecFin().plusDays(1);
+            np = perlista.get(perlista.size() - 1).getNumPer() + 1;
+        }
+        if(ffUtil.isBefore(ffPer)){
+            fecFinPer = ffUtil;
+        } else{
+            fecFinPer = ffPer;
+        }
+
+        per = new Periodo();
+        per.setNumPer(np);
+        per.setFecIni(fecIniPer);
+
+        per.setFecFin(per.getFecIni().withDayOfMonth(1).plusMonths(1).minusDays(1));
+        listPeriodos.add(per);
+        fecIniPer = per.getFecFin().plusDays(1);
+
+        np++;
+        tmpToFin = fecIniPer.until(fecFinPer);
+
+        for(int a=0;a<=tmpToFin.toTotalMonths() + b ;a++){
+            per = new Periodo();
+            per.setNumPer(np);
+            per.setFecIni(fecIniPer.plusMonths(a));
+            if(per.getFecIni().plusMonths(1).isAfter(fecFinPer.minusDays(1))){ // Ojo aquí con las demas funciones minusdays(1)
+                per.setFecFin(fecFinPer);
+                listPeriodos.add(per);
+                System.out.println("ROMPIO CON F0: " + per.getFecIni() + " FF: " + per.getFecFin());
+                break;
+            } else{
+                per.setFecFin(per.getFecIni().plusMonths(1).minusDays(1));
+                listPeriodos.add(per);
+            }
+            np++;
+        }
+        return listPeriodos;
+    }
+
+    public ArrayList<Periodo> crearPeriodos4(ArrayList<Periodo> perlista, LocalDate foUtil, LocalDate ffUtil){
+        LocalDate fecIniPer;
+        LocalDate fecFinPer;
+        Period tmpToFin;
+        Periodo per;
+        int b = 0;
+        int np = 1;
+        ArrayList<Periodo> listPeriodos = new ArrayList<Periodo>();
+        if(perlista.size()==0){
+            fecIniPer = foUtil;
+        } else {
+            listPeriodos = perlista;
+            fecIniPer = perlista.get(perlista.size() - 1).getFecFin().plusDays(1);
+            np = perlista.get(perlista.size() - 1).getNumPer() + 1;
+        }
+
+        fecFinPer = ffUtil;
+
+        per = new Periodo();
+        per.setNumPer(np);
+        per.setFecIni(fecIniPer);
+
+        if((per.getFecIni().isAfter(LocalDate.of(fecIniPer.getYear(),1,1).minusDays(1))&&
+                per.getFecIni().isBefore(LocalDate.of(per.getFecIni().getYear(),5,1)))||
+                ((per.getFecIni().isAfter(LocalDate.of(fecIniPer.getYear(),11,1).minusDays(1))&&
+                        per.getFecIni().isBefore(LocalDate.of(per.getFecIni().getYear()+1,1,1))))){
+
+            per.setFecFin(LocalDate.of(per.getFecIni().getYear(),4,30));
+            listPeriodos.add(per);
+            fecIniPer = per.getFecFin().plusDays(1);
+
+
+        }else if (per.getFecIni().isAfter(LocalDate.of(fecIniPer.getYear(),5,1).minusDays(1))&&
+                per.getFecIni().isBefore(LocalDate.of(per.getFecIni().getYear(),11,1))){
+
+            per.setFecFin(LocalDate.of(per.getFecIni().getYear(),10,31));
+            listPeriodos.add(per);
+            fecIniPer = per.getFecFin().plusDays(1);
+        }
+        np++;
+        tmpToFin = fecIniPer.until(fecFinPer);
+
+        for(int a=0;a<=tmpToFin.toTotalMonths();a=a+6){
+            per = new Periodo();
+            per.setNumPer(np);
+            per.setFecIni(fecIniPer.plusMonths(a));
+            if(per.getFecIni().plusMonths(6).isAfter(fecFinPer.minusDays(b+1))){
+                per.setFecFin(fecFinPer);
+                listPeriodos.add(per);
+                break;
+            } else{
+                per.setFecFin(per.getFecIni().plusMonths(6).minusDays(1));
+                listPeriodos.add(per);
+            }
+            b++;
+            np++;
         }
         return listPeriodos;
     }
@@ -153,7 +266,6 @@ public class ListaPeriodos {
         LocalDate fi = null;
         LocalDate ff = null;
         Period timeToFinPer = null;
-        System.out.println("Ingreso hasta el " + LocalDate.parse(FEC_FIN_PT1));
         int p = 0;
 
         /*  Periodos CTS de la Reserva  */
@@ -169,12 +281,16 @@ public class ListaPeriodos {
                     System.out.println("\t\tCaso 01");
                     periodos = crearPeriodos(new ArrayList<Periodo>(), LocalDate.parse(FEC_FIN_OSPT1), f0, datosLaborales.getFecCese());
                     periodos = crearPeriodos(periodos, LocalDate.parse(FEC_FIN_PT1), f0, datosLaborales.getFecCese());
+                    periodos = crearPeriodos2(periodos, LocalDate.parse(FEC_FIN_PT2), f0, datosLaborales.getFecCese());
+                    periodos = crearPeriodos3(periodos, LocalDate.parse(FEC_FIN_PT3), f0, datosLaborales.getFecCese());
                 }
 
                 /*  Sub-Periodo Tipo 2  */
                 else{
                     System.out.println("\t\tCaso 02");
                     periodos = crearPeriodos(new ArrayList<Periodo>(), LocalDate.parse(FEC_FIN_PT1), f0, datosLaborales.getFecCese());
+                    periodos = crearPeriodos2(periodos, LocalDate.parse(FEC_FIN_PT2), f0, datosLaborales.getFecCese());
+                    periodos = crearPeriodos3(periodos, LocalDate.parse(FEC_FIN_PT3), f0, datosLaborales.getFecCese());
                 }
             }
 
@@ -186,6 +302,8 @@ public class ListaPeriodos {
                 if(datosLaborales.getFecVincul().isBefore((LocalDate.parse(FEC_INI_EC2)))){
                     System.out.println("Caso de Ingreso 1:");
                     periodos = crearPeriodos(new ArrayList<Periodo>(), LocalDate.parse(FEC_FIN_PT1), f0, datosLaborales.getFecCese());
+                    periodos = crearPeriodos2(periodos, LocalDate.parse(FEC_FIN_PT2), f0, datosLaborales.getFecCese());
+                    periodos = crearPeriodos3(periodos, LocalDate.parse(FEC_FIN_PT3), f0, datosLaborales.getFecCese());
                 }
 
                 /*  Caso 2  */
@@ -198,6 +316,8 @@ public class ListaPeriodos {
                         periodos = crearPeriodos(new ArrayList<Periodo>(), LocalDate.parse(FEC_FIN_EC2T1), f0, datosLaborales.getFecCese());
                         periodos = crearPeriodos(periodos, LocalDate.parse(FEC_FIN_EC2T2), f0, datosLaborales.getFecCese());
                         periodos = crearPeriodos(periodos, LocalDate.parse(FEC_FIN_PT1), f0, datosLaborales.getFecCese());
+                        periodos = crearPeriodos2(periodos, LocalDate.parse(FEC_FIN_PT2), f0, datosLaborales.getFecCese());
+                        periodos = crearPeriodos3(periodos, LocalDate.parse(FEC_FIN_PT3), f0, datosLaborales.getFecCese());
                     }
 
                     /*  Sub-Sub-Periodo Tipo 2  */
@@ -205,12 +325,16 @@ public class ListaPeriodos {
                         System.out.println("\t\tSub-Periodo Tipo 2");
                         periodos = crearPeriodos(new ArrayList<Periodo>(), LocalDate.parse(FEC_FIN_EC2T2), f0, datosLaborales.getFecCese());
                         periodos = crearPeriodos(periodos, LocalDate.parse(FEC_FIN_PT1), f0, datosLaborales.getFecCese());
+                        periodos = crearPeriodos2(periodos, LocalDate.parse(FEC_FIN_PT2), f0, datosLaborales.getFecCese());
+                        periodos = crearPeriodos3(periodos, LocalDate.parse(FEC_FIN_PT3), f0, datosLaborales.getFecCese());
                     }
 
                     /*  Sub-Sub-Periodo Tipo 3  */
                     if((datosLaborales.getFecVincul().isBefore((LocalDate.parse(FEC_FIN_PT1).plusDays(1))))&&(datosLaborales.getFecVincul().isAfter((LocalDate.parse(FEC_FIN_EC2T2).minusDays(1))))) {
                         System.out.println("\t\tSub-Periodo Tipo 3");
                         periodos = crearPeriodos(new ArrayList<Periodo>(), LocalDate.parse(FEC_FIN_PT1), f0, datosLaborales.getFecCese());
+                        periodos = crearPeriodos2(periodos, LocalDate.parse(FEC_FIN_PT2), f0, datosLaborales.getFecCese());
+                        periodos = crearPeriodos3(periodos, LocalDate.parse(FEC_FIN_PT3), f0, datosLaborales.getFecCese());
                     }
                 }
             }
@@ -225,19 +349,21 @@ public class ListaPeriodos {
         else if(datosLaborales.getFecVincul().isBefore((LocalDate.parse(FEC_FIN_PT2).plusDays(1)))&&(datosLaborales.getFecVincul().isAfter((LocalDate.parse(FEC_FIN_PT1).minusDays(1))))){
             System.out.println("Periodos CTS Tipo 2 Semestral: ");
             periodos = crearPeriodos2(new ArrayList<Periodo>(), LocalDate.parse(FEC_FIN_PT2), f0, datosLaborales.getFecCese());
+            periodos = crearPeriodos3(periodos, LocalDate.parse(FEC_FIN_PT3), f0, datosLaborales.getFecCese());
 
         }
 
         /*  Periodos CTS Tipo 3: Mensual  */
         else if(datosLaborales.getFecVincul().isBefore((LocalDate.parse(FEC_FIN_PT3).plusDays(1)))&&(datosLaborales.getFecVincul().isAfter((LocalDate.parse(FEC_FIN_PT2).minusDays(1))))){
             System.out.println("Periodos CTS Tipo 3: Mensual ");
-
+            periodos = crearPeriodos3(new ArrayList<Periodo>(), LocalDate.parse(FEC_FIN_PT3), f0, datosLaborales.getFecCese());
+            periodos = crearPeriodos4(periodos, f0, datosLaborales.getFecCese());
         }
 
         /*  Periodos CTS Tipo 4: Semestral */
         else if(datosLaborales.getFecVincul().isAfter(LocalDate.parse(FEC_INI_PT4).minusDays(1))){
             System.out.println("Periodos CTS Tipo 4: Semestral ");
-
+            periodos = crearPeriodos4(new ArrayList<Periodo>(), f0, datosLaborales.getFecCese());
         }
 
         /*  Recorriendo los periodos    */
