@@ -111,7 +111,7 @@ public class ListaPeriodos {
         per = new Periodo();
         per.setNumPer(np);
         per.setFecIni(fecIniPer);
-
+/*
         if((per.getFecIni().isAfter(LocalDate.of(fecIniPer.getYear(),1,1).minusDays(1))&&
                 per.getFecIni().isBefore(LocalDate.of(per.getFecIni().getYear(),5,1)))||
                 ((per.getFecIni().isAfter(LocalDate.of(fecIniPer.getYear(),11,1).minusDays(1))&&
@@ -129,7 +129,7 @@ public class ListaPeriodos {
             listPeriodos.add(per);
             fecIniPer = per.getFecFin().plusDays(1);
         }
-        np++;
+        np++;*/
         tmpToFin = fecIniPer.until(fecFinPer);
 
         for(int a=0;a<=tmpToFin.toTotalMonths();a=a+6){
@@ -283,6 +283,7 @@ public class ListaPeriodos {
                     periodos = crearPeriodos(periodos, LocalDate.parse(FEC_FIN_PT1), f0, datosLaborales.getFecCese());
                     periodos = crearPeriodos2(periodos, LocalDate.parse(FEC_FIN_PT2), f0, datosLaborales.getFecCese());
                     periodos = crearPeriodos3(periodos, LocalDate.parse(FEC_FIN_PT3), f0, datosLaborales.getFecCese());
+                    periodos = crearPeriodos4(periodos, f0, datosLaborales.getFecCese());
                 }
 
                 /*  Sub-Periodo Tipo 2  */
@@ -291,6 +292,7 @@ public class ListaPeriodos {
                     periodos = crearPeriodos(new ArrayList<Periodo>(), LocalDate.parse(FEC_FIN_PT1), f0, datosLaborales.getFecCese());
                     periodos = crearPeriodos2(periodos, LocalDate.parse(FEC_FIN_PT2), f0, datosLaborales.getFecCese());
                     periodos = crearPeriodos3(periodos, LocalDate.parse(FEC_FIN_PT3), f0, datosLaborales.getFecCese());
+                    periodos = crearPeriodos4(periodos, f0, datosLaborales.getFecCese());
                 }
             }
 
@@ -304,6 +306,7 @@ public class ListaPeriodos {
                     periodos = crearPeriodos(new ArrayList<Periodo>(), LocalDate.parse(FEC_FIN_PT1), f0, datosLaborales.getFecCese());
                     periodos = crearPeriodos2(periodos, LocalDate.parse(FEC_FIN_PT2), f0, datosLaborales.getFecCese());
                     periodos = crearPeriodos3(periodos, LocalDate.parse(FEC_FIN_PT3), f0, datosLaborales.getFecCese());
+                    periodos = crearPeriodos4(periodos, f0, datosLaborales.getFecCese());
                 }
 
                 /*  Caso 2  */
@@ -318,6 +321,7 @@ public class ListaPeriodos {
                         periodos = crearPeriodos(periodos, LocalDate.parse(FEC_FIN_PT1), f0, datosLaborales.getFecCese());
                         periodos = crearPeriodos2(periodos, LocalDate.parse(FEC_FIN_PT2), f0, datosLaborales.getFecCese());
                         periodos = crearPeriodos3(periodos, LocalDate.parse(FEC_FIN_PT3), f0, datosLaborales.getFecCese());
+                        periodos = crearPeriodos4(periodos, f0, datosLaborales.getFecCese());
                     }
 
                     /*  Sub-Sub-Periodo Tipo 2  */
@@ -327,6 +331,7 @@ public class ListaPeriodos {
                         periodos = crearPeriodos(periodos, LocalDate.parse(FEC_FIN_PT1), f0, datosLaborales.getFecCese());
                         periodos = crearPeriodos2(periodos, LocalDate.parse(FEC_FIN_PT2), f0, datosLaborales.getFecCese());
                         periodos = crearPeriodos3(periodos, LocalDate.parse(FEC_FIN_PT3), f0, datosLaborales.getFecCese());
+                        periodos = crearPeriodos4(periodos, f0, datosLaborales.getFecCese());
                     }
 
                     /*  Sub-Sub-Periodo Tipo 3  */
@@ -335,6 +340,7 @@ public class ListaPeriodos {
                         periodos = crearPeriodos(new ArrayList<Periodo>(), LocalDate.parse(FEC_FIN_PT1), f0, datosLaborales.getFecCese());
                         periodos = crearPeriodos2(periodos, LocalDate.parse(FEC_FIN_PT2), f0, datosLaborales.getFecCese());
                         periodos = crearPeriodos3(periodos, LocalDate.parse(FEC_FIN_PT3), f0, datosLaborales.getFecCese());
+                        periodos = crearPeriodos4(periodos, f0, datosLaborales.getFecCese());
                     }
                 }
             }
@@ -350,6 +356,7 @@ public class ListaPeriodos {
             System.out.println("Periodos CTS Tipo 2 Semestral: ");
             periodos = crearPeriodos2(new ArrayList<Periodo>(), LocalDate.parse(FEC_FIN_PT2), f0, datosLaborales.getFecCese());
             periodos = crearPeriodos3(periodos, LocalDate.parse(FEC_FIN_PT3), f0, datosLaborales.getFecCese());
+            periodos = crearPeriodos4(periodos, f0, datosLaborales.getFecCese());
 
         }
 
