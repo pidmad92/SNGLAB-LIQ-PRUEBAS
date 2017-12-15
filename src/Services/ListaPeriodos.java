@@ -73,6 +73,37 @@ public class ListaPeriodos {
             fecFinPer = ffPer;
         }
 
+
+        per = new Periodo();
+        np++;
+        per.setNumPer(np);
+        per.setFecIni(fecIniPer);
+        LocalDate as;
+        for(as = foUtil;as.isBefore(fecFinPer.plusDays(1));as = as.plusYears(1)){
+            if(as.isAfter(fecIniPer.minusDays(1))){
+//                System.out.println(fecIniPer + " Fecha: "+ as + " " + fecFinPer);
+                //
+                if(per.getFecIni().plusYears(1).minusDays(1).isAfter(fecFinPer.minusDays(1))){
+                    per.setFecFin(fecFinPer);
+                    listPeriodos.add(per);
+                    break;
+                } else {
+                    per.setFecFin(as.minusDays(1).plusYears(1));//plus
+                    listPeriodos.add(per);
+                    break;
+                }
+            }
+        }
+
+        fecIniPer = listPeriodos.get(listPeriodos.size() - 1).getFecFin().plusDays(1);
+        np = listPeriodos.get(listPeriodos.size() - 1).getNumPer();
+
+        if(ffUtil.isBefore(ffPer)){
+            fecFinPer = ffUtil;
+        } else{
+            fecFinPer = ffPer;
+        }
+
         tmpToFin = fecIniPer.until(fecFinPer);
         // a = años, para un periodo anual
         for(int a=0;a<=tmpToFin.getYears();a++){
